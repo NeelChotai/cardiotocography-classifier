@@ -1,0 +1,3 @@
+[submodule "rbf"]
+	path = rbf
+	url = git@github.com:PetraVidnerova/rbf_keras.git
