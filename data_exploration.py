@@ -12,19 +12,20 @@ data = data.dropna()
 data = data.loc[:, features]
 normalised_features = StandardScaler().fit_transform(data)
 
-#constant_rows = data[data.apply(lambda x: min(x) == max(x), 1)]
-#print(constant_rows)
-
-#duplicate_rows = data[data.duplicated()]
-#print(len(duplicate_rows))
-
-#pca = PCA(n_components=len(features)).fit(normalised_features)
-
-#for f, p in zip(features, pca.explained_variance_ratio_):
-    #print(f + ": %.2f%%" % float(p*100))
-
-#sns.pairplot(data)
-#plt.show()
-
+constant_rows = data[data.apply(lambda x: min(x) == max(x), 1)]
+duplicate_rows = data[data.duplicated()]
 z = np.abs(stats.zscore(data))
-print(len(np.where(z > 3)[0]))
+
+pca = PCA(n_components=len(features)).fit(normalised_features)
+
+print("Feature | Variance")
+for f, p in zip(features, pca.explained_variance_ratio_):
+    print(f + ": %.2f%%" % float(p*100))
+
+print("Constant rows: {}".format(constant_rows))
+print("Duplicate rows: {}".format(len(duplicate_rows)))
+print("Outliers (3 standard deviations from mean): {}".format(
+    len(np.where(z > 3)[0])))
+
+sns.pairplot(data)  # eliminate strongly correlated features
+plt.show()
